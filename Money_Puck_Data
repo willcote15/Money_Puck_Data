@@ -1,0 +1,68 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+from datetime import datetime
+from io import StringIO
+
+# URL of the webpage containing the CSV link
+BASE_URL = "https://moneypuck.com"  # Replace with actual base URL
+PAGE_URL = "https://moneypuck.com/data.htm"  # Replace with actual page URL
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+}
+
+
+def get_csv_url():
+    """Extracts the CSV URL from the webpage."""
+    response = requests.get(PAGE_URL, headers=HEADERS)
+    response.raise_for_status()  # Raise error for bad responses
+
+    soup = BeautifulSoup(response.text, "html.parser")
+    link = soup.find(
+        "a",
+        href=lambda x: x
+        and "moneypuck/playerData/seasonSummary/2024/regular/skaters.csv" in x,
+    )
+
+    if link and link["href"]:
+        return BASE_URL + "/" + link["href"]  # Construct full URL
+
+    return None
+
+
+def download_csv(csv_url):
+    """Downloads the CSV file while bypassing 403 errors."""
+    if not csv_url:
+        print("CSV URL not found.")
+        return
+
+    # Use requests to fetch CSV content with headers
+    response = requests.get(csv_url, headers=HEADERS)
+    if response.status_code == 403:
+        print(
+            "Access Denied (403). Check if the link has changed or requires authentication."
+        )
+        return
+
+    response.raise_for_status()  # Raise error for bad responses
+    csv_data = StringIO(response.text)  # Convert text to file-like object
+
+    df = pd.read_csv(csv_data)
+    filename = f"skaters_data_{datetime.now().strftime('%Y-%m-%d')}.csv"
+    df.to_csv(filename, index=False)
+    print(f"CSV saved as {filename}")
+
+
+def main():
+    """Main function to get the CSV and save it."""
+    csv_url = get_csv_url()
+    if csv_url:
+        print(f"Found CSV URL: {csv_url}")
+        download_csv(csv_url)
+    else:
+        print("CSV link not found.")
+
+
+if __name__ == "__main__":
+    main()
