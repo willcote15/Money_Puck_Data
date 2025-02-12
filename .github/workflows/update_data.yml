@@ -26,7 +26,7 @@ jobs:
         run: ls -R  # Lists all files to check script location
 
       - name: Run data update script
-        run: python Money_Puck_Data/Money_Puck_Data.py  # Updated path
+        run: python moneypuck_data/Money_Puck_Data.py  # Updated path
 
       - name: Commit and Push Changes
         run: |
