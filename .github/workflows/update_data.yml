@@ -23,10 +23,10 @@ jobs:
           pip install requests beautifulsoup4 pandas
 
       - name: Debug - List repository files
-        run: ls -R  # This will print all files in the repository
+        run: ls -R  # Lists all files to check script location
 
       - name: Run data update script
-        run: python Money_Puck_Data.py  # Try running without subfolder
+        run: python Money_Puck_Data/Money_Puck_Data.py  # Updated path
 
       - name: Commit and Push Changes
         run: |
