@@ -22,7 +22,7 @@ jobs:
         run: |
           pip install requests beautifulsoup4 pandas
 
-      - name: Debug - List repository files
+      - name: Debug - Check Folder Structure
         run: ls -R  # Lists all files to check script location
 
       # Step 2: Navigate to the correct directory before running the script
