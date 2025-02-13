@@ -22,20 +22,16 @@ jobs:
         run: |
           pip install requests beautifulsoup4 pandas
 
-      - name: Debug - Check Folder Structure
+      - name: Debug - List repository files
         run: ls -R  # Lists all files to check script location
 
-      # Step 2: Navigate to the correct directory before running the script
       - name: Run data update script
-        run: |
-          cd moneypuck_data  # Move into the correct directory
-          python Money_Puck_Data.py  # Run the script
+        run: python Money_Puck_Data/Money_Puck_Data.py  # Updated path
 
       - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
           git add data/skaters_data_24-25.csv
-          git commit -m "Updated skaters data"
+          git commit -m "Updated skaters data" || echo "No changes to commit"
           git push
-
