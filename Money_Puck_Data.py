@@ -47,7 +47,7 @@ def download_csv(csv_url):
         response.raise_for_status()
 
         # Save CSV file
-        filename = "data/2024-2025_skaters_data.csv"
+        filename = "data/24-25_skaters_data.csv"
         with open(filename, "wb") as file:
             file.write(response.content)
 
