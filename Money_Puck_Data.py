@@ -34,7 +34,7 @@ def get_csv_url():
 
 
 def download_csv(csv_url):
-    """Downloads the CSV file and saves it as 2024-2025_skaters_data.csv."""
+    """Downloads the CSV file and saves it as 24-25_skaters_data.csv."""
     if not csv_url:
         print("No CSV URL provided.")
         return
