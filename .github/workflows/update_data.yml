@@ -26,8 +26,8 @@ jobs:
         run: find . -type f  # Lists all files to check script location
 
       - name: Run data update script
-        run: python Money_Puck_Data.py # Updated path
-        working-directory: Money_Puck_Data
+        run: python Money_Puck_Data.py
+        working-directory: ${{ github.workspace }}
 
       - name: Commit and Push Changes
         run: |
