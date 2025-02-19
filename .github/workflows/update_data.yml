@@ -22,11 +22,12 @@ jobs:
         run: |
           pip install requests beautifulsoup4 pandas
 
-      - name: Debug - List repository files
-        run: ls -R Money_Puck_Data  # Lists all files to check script location
+      - name: Debug - List all files with full details
+        run: find . -type f  # Lists all files to check script location
 
       - name: Run data update script
-        run: python Hockey_Stats/Money_Puck_Data/Money_Puck_Data.py  # Updated path
+        run: python Money_Puck_Data.py # Updated path
+        working-directory: Money_Puck_Data
 
       - name: Commit and Push Changes
         run: |
