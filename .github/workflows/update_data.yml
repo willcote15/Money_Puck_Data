@@ -35,7 +35,6 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add data/skaters_data_24-25.csv
+          git add data/24-25_skaters_data.csv
           git commit -m "Updated skaters data" || echo "No changes to commit"
           git push https://x-access-token:${GH_TOKEN}@github.com/willcote15/Money_Puck_Data.git
-
