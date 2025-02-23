@@ -2,7 +2,8 @@ name: Update MoneyPuck Data
 
 on:
   schedule:
-    - cron: "0 4 * * *"
+    - cron: "0 9 * * *"  # 4 AM ET during Standard Time (Nov–Mar)
+    - cron: "0 8 * * *"  # 4 AM ET during Daylight Saving Time (Mar–Nov)
   workflow_dispatch:
 
 permissions:

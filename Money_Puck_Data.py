@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
-from datetime import datetime  # Import datetime for timestamp logging
+from datetime import datetime
+import pytz  # Import pytz for timezone conversion
 
 # MoneyPuck website URL
 URL = "https://moneypuck.com/data.htm"
@@ -52,9 +53,16 @@ def download_csv(csv_url):
         with open(filename, "wb") as file:
             file.write(response.content)
 
-        # Log the update time
-        now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
-        print(f"✅ Data saved to {filename} at {now}")
+        # Log the update time in Eastern Time
+        utc_now = datetime.utcnow()
+        eastern = pytz.timezone("America/New_York")
+        et_now = (
+            utc_now.replace(tzinfo=pytz.utc)
+            .astimezone(eastern)
+            .strftime("%Y-%m-%d %I:%M:%S %p ET")
+        )
+
+        print(f"✅ Data saved to {filename} at {et_now}")
 
     except Exception as e:
         print(f"Error downloading or saving the CSV: {e}")
