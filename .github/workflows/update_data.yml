@@ -2,8 +2,11 @@ name: Update MoneyPuck Data
 
 on:
   schedule:
-    - cron: "0 4 * * *"  # Runs every day at 4 AM UTC
-  workflow_dispatch:  # Allows manual runs
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Ensure GitHub Actions can push
 
 jobs:
   update-data:
@@ -22,12 +25,11 @@ jobs:
         run: |
           pip install requests beautifulsoup4 pandas
 
-      - name: Debug - List all files with full details
-        run: find . -type f  # Lists all files to check script location
+      - name: Debug - List all files
+        run: find . -type f
 
       - name: Run data update script
         run: python Money_Puck_Data.py
-        working-directory: ${{ github.workspace }}
 
       - name: Commit and Push Changes
         env:
@@ -35,6 +37,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/willcote15/Money_Puck_Data.git
           git add data/24-25_skaters_data.csv
           git commit -m "Updated skaters data" || echo "No changes to commit"
-          git push https://x-access-token:${GH_TOKEN}@github.com/willcote15/Money_Puck_Data.git
+          git push origin main
