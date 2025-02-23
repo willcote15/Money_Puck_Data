@@ -39,12 +39,24 @@ if os.path.exists(csv_path):
         # Sort by shots per game (descending order)
         df_display = df_display.sort_values(by="shots_per_game", ascending=False)
 
-        # Streamlit UI
+        # Apply Streamlit UI modifications
+        st.set_page_config(layout="wide")  # Expands layout to full width
         st.title("NHL Skater Stats Dashboard")
         st.write("Compare Skater Stats Between Two Teams")
 
-        # Create two columns for side-by-side comparison
-        col1, col2 = st.columns(2)
+        # Custom CSS to increase table width
+        st.markdown(
+            """
+            <style>
+                .dataframe { width: 100% !important; }
+                [data-testid="stDataFrame"] { overflow: auto; }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
+        # Create two wide columns for side-by-side comparison
+        col1, col2 = st.columns([1, 1])  # Equal width
 
         # Get unique teams
         team_list = sorted(df_display["team"].unique())
@@ -54,14 +66,15 @@ if os.path.exists(csv_path):
             st.subheader("Team 1")
             team_1 = st.selectbox("Select Team 1:", team_list, key="team_1")
             df_team_1 = df_display[df_display["team"] == team_1]
-            st.dataframe(df_team_1)
+            st.dataframe(df_team_1, use_container_width=True)
 
         # Right column - Team 2 selection and table
         with col2:
             st.subheader("Team 2")
             team_2 = st.selectbox("Select Team 2:", team_list, key="team_2")
             df_team_2 = df_display[df_display["team"] == team_2]
-            st.dataframe(df_team_2)
+            st.dataframe(df_team_2, use_container_width=True)
+
     else:
         st.error(f"❌ Missing required columns in the dataset: {required_columns - set(df.columns)}")
 else:
