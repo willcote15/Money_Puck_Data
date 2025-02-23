@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
+from datetime import datetime  # Import datetime for timestamp logging
 
 # MoneyPuck website URL
 URL = "https://moneypuck.com/data.htm"
@@ -51,7 +52,10 @@ def download_csv(csv_url):
         with open(filename, "wb") as file:
             file.write(response.content)
 
-        print(f"✅ Data saved to {filename}")
+        # Log the update time
+        now = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+        print(f"✅ Data saved to {filename} at {now}")
+
     except Exception as e:
         print(f"Error downloading or saving the CSV: {e}")
 
