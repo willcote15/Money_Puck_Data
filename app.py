@@ -1,6 +1,9 @@
+import streamlit as st
 import os
 import pandas as pd
-import streamlit as st
+
+# Set page layout to wide (must be the first Streamlit command)
+st.set_page_config(layout="wide")
 
 # Get the correct path
 csv_path = os.path.join("data", "24-25_skaters_data.csv")  # Relative path
@@ -62,7 +65,6 @@ if os.path.exists(csv_path):
         df_display = df_display.sort_values(by="shots_per_game", ascending=False)
 
         # Apply Streamlit UI modifications
-        st.set_page_config(layout="wide")  # Expands layout to full width
         st.title("NHL Skater Stats Dashboard")
         st.write("Compare Skater Stats Between Two Teams")
 
