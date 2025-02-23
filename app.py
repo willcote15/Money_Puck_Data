@@ -18,8 +18,11 @@ if os.path.exists(csv_path):
         # Filter for situation "all"
         df_filtered = df[df["situation"] == "all"].copy()
 
-        # Calculate shots on goal per game
-        df_filtered["shots_per_game"] = df_filtered["I_F_shotsOnGoal"] / df_filtered["games_played"]
+        # Calculate shots on goal per game, rounded to 2 decimal places
+        df_filtered["shots_per_game"] = (df_filtered["I_F_shotsOnGoal"] / df_filtered["games_played"]).round(2)
+
+        # Format season as "YYYY-YYYY" instead of "YYYY, YYYY"
+        df_filtered["season"] = df_filtered["season"].astype(str).str.replace(",", "-")
 
         # Select relevant columns
         df_display = df_filtered[["season", "name", "team", "position", "shots_per_game"]]
