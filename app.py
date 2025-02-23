@@ -22,17 +22,22 @@ def get_file_timestamp(filepath):
 def load_data():
     return pd.read_csv(csv_path)
 
-# Display the last updated timestamp
-file_timestamp = get_file_timestamp(csv_path)
-
-if file_timestamp:
-    st.sidebar.markdown(f"📅 **Data last updated:** {file_timestamp}")
-else:
-    st.sidebar.markdown("⚠️ **Data file not found!**")
-
 # Check if file exists before loading
 if os.path.exists(csv_path):
     df = load_data()  # Always loads the latest CSV
+
+    # Get the last updated timestamp
+    file_timestamp = get_file_timestamp(csv_path)
+
+    # Display the last updated timestamp **above** the dashboard title
+    if file_timestamp:
+        st.markdown(f"### 📅 Data last updated: **{file_timestamp}**")
+    else:
+        st.markdown("### ⚠️ **Data file not found!**")
+
+    # Apply Streamlit UI modifications
+    st.title("NHL Skater Stats Dashboard")
+    st.write("Compare Skater Stats Between Two Teams")
 
     # Ensure necessary columns exist
     required_columns = {
@@ -82,10 +87,6 @@ if os.path.exists(csv_path):
 
         # Sort by shots per game (descending order)
         df_display = df_display.sort_values(by="shots_per_game", ascending=False)
-
-        # Apply Streamlit UI modifications
-        st.title("NHL Skater Stats Dashboard")
-        st.write("Compare Skater Stats Between Two Teams")
 
         # Custom CSS to increase table width
         st.markdown(
