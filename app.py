@@ -9,11 +9,16 @@ st.set_page_config(layout="wide")
 csv_path = os.path.join("data", "24-25_skaters_data.csv")  # Relative path
 
 # Debugging: Show the actual path being used
-#st.write(f"Looking for file at: {os.path.abspath(csv_path)}")
+# st.write(f"Looking for file at: {os.path.abspath(csv_path)}")
 
-# Check if file exists
+# Define a function to load data with cache disabled
+@st.cache_data(ttl=0)  # Forces a fresh load every time
+def load_data():
+    return pd.read_csv(csv_path)
+
+# Check if file exists before loading
 if os.path.exists(csv_path):
-    df = pd.read_csv(csv_path)
+    df = load_data()
 
     # Ensure necessary columns exist
     required_columns = {
@@ -89,19 +94,4 @@ if os.path.exists(csv_path):
         with col1:
             st.subheader("Team 1")
             team_1 = st.selectbox("Select Team 1:", team_list, key="team_1")
-            df_team_1 = df_display[df_display["team"] == team_1]
-            st.dataframe(df_team_1, use_container_width=True)
-
-        # Right column - Team 2 selection and table
-        with col2:
-            st.subheader("Team 2")
-            team_2 = st.selectbox("Select Team 2:", team_list, key="team_2")
-            df_team_2 = df_display[df_display["team"] == team_2]
-            st.dataframe(df_team_2, use_container_width=True)
-
-    else:
-        st.error(
-            f"❌ Missing required columns in the dataset: {required_columns - set(df.columns)}"
-        )
-else:
-    st.error(f"❌ File not found: {os.path.abspath(csv_path)}")
+           
