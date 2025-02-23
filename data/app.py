@@ -1,10 +1,14 @@
-import streamlit as st
+import os
 import pandas as pd
+import streamlit as st
 
-# Load the latest CSV file
-csv_path = "data/24-25_skaters_data.csv"  # Make sure this path is correct
-df = pd.read_csv(csv_path)
+# Get the absolute path
+csv_path = os.path.join(os.getcwd(), "data", "24-25_skaters_data.csv")
 
-# Display the dataframe
-st.title("NHL Skater Stats Dashboard")
-st.dataframe(df)
+# Check if file exists before loading
+if os.path.exists(csv_path):
+    df = pd.read_csv(csv_path)
+    st.title("NHL Skater Stats Dashboard")
+    st.dataframe(df)
+else:
+    st.error(f"❌ File not found: {csv_path}")
