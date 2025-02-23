@@ -52,5 +52,20 @@ if os.path.exists(csv_path):
         # Left column - Team 1 selection and table
         with col1:
             st.subheader("Team 1")
-       
+            team_1 = st.selectbox("Select Team 1:", team_list, key="team_1")
+            df_team_1 = df_display[df_display["team"] == team_1]
+            st.dataframe(df_team_1)
+
+        # Right column - Team 2 selection and table
+        with col2:
+            st.subheader("Team 2")
+            team_2 = st.selectbox("Select Team 2:", team_list, key="team_2")
+            df_team_2 = df_display[df_display["team"] == team_2]
+            st.dataframe(df_team_2)
+    else:
+        st.error(f"❌ Missing required columns in the dataset: {required_columns - set(df.columns)}")
+else:
+    st.error(f"❌ File not found: {os.path.abspath(csv_path)}")
+
+
 
