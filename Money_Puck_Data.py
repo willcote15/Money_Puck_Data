@@ -2,8 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
+import io  # Import io for StringIO
 from datetime import datetime
-import pytz  # Import pytz for timezone conversion
+import pytz
 
 # MoneyPuck website URL
 URL = "https://moneypuck.com/data.htm"
@@ -58,7 +59,7 @@ def download_csv(csv_url):
         response.raise_for_status()
 
         # Load into Pandas to verify data
-        df = pd.read_csv(pd.compat.StringIO(response.text))
+        df = pd.read_csv(io.StringIO(response.text))  # ✅ Fixed issue
 
         # Check if the season column contains 2024
         if (
