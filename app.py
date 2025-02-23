@@ -13,29 +13,19 @@ if os.path.exists(csv_path):
     df = pd.read_csv(csv_path)
 
     # Ensure necessary columns exist
-    required_columns = {
-        "playerId",
-        "season",
-        "name",
-        "team",
-        "position",
-        "situation",
-        "I_F_shotsOnGoal",
-        "games_played",
-    }
+    required_columns = {"playerId", "season", "name", "team", "position", "situation", "I_F_shotsOnGoal", "games_played"}
     if required_columns.issubset(df.columns):
         # Filter for situation "all"
         df_filtered = df[df["situation"] == "all"].copy()
 
         # Calculate shots on goal per game
-        df_filtered["shots_per_game"] = (
-            df_filtered["I_F_shotsOnGoal"] / df_filtered["games_played"]
-        )
+        df_filtered["shots_per_game"] = df_filtered["I_F_shotsOnGoal"] / df_filtered["games_played"]
 
         # Select relevant columns
-        df_display = df_filtered[
-            ["season", "name", "team", "position", "shots_per_game"]
-        ]
+        df_display = df_filtered[["season", "name", "team", "position", "shots_per_game"]]
+
+        # Sort by shots per game (descending order)
+        df_display = df_display.sort_values(by="shots_per_game", ascending=False)
 
         # Streamlit UI
         st.title("NHL Skater Stats Dashboard")
@@ -52,8 +42,6 @@ if os.path.exists(csv_path):
         # Display dataframe
         st.dataframe(df_display)
     else:
-        st.error(
-            f"❌ Missing required columns in the dataset: {required_columns - set(df.columns)}"
-        )
+        st.error(f"❌ Missing required columns in the dataset: {required_columns - set(df.columns)}")
 else:
     st.error(f"❌ File not found: {os.path.abspath(csv_path)}")
