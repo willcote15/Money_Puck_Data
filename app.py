@@ -9,7 +9,7 @@ st.set_page_config(layout="wide")
 csv_path = os.path.join("data", "24-25_skaters_data.csv")  # Relative path
 
 # Debugging: Show the actual path being used
-st.write(f"Looking for file at: {os.path.abspath(csv_path)}")
+#st.write(f"Looking for file at: {os.path.abspath(csv_path)}")
 
 # Check if file exists
 if os.path.exists(csv_path):
