@@ -1,6 +1,8 @@
 import streamlit as st
 import os
 import pandas as pd
+from datetime import datetime
+import pytz  # Import for timezone conversion
 
 # Set page layout to wide (must be the first Streamlit command)
 st.set_page_config(layout="wide")
@@ -8,17 +10,29 @@ st.set_page_config(layout="wide")
 # Get the correct path
 csv_path = os.path.join("data", "24-25_skaters_data.csv")  # Relative path
 
-# Debugging: Show the actual path being used
-# st.write(f"Looking for file at: {os.path.abspath(csv_path)}")
+# Function to get the last modified timestamp of the CSV
+def get_file_timestamp(filepath):
+    if os.path.exists(filepath):
+        utc_time = datetime.utcfromtimestamp(os.path.getmtime(filepath))
+        eastern = pytz.timezone("America/New_York")
+        return utc_time.replace(tzinfo=pytz.utc).astimezone(eastern).strftime("%Y-%m-%d %I:%M:%S %p ET")
+    return None
 
-# Define a function to load data with cache disabled
-@st.cache_data(ttl=0)  # Forces a fresh load every time
+# Function to load the latest data without caching
 def load_data():
     return pd.read_csv(csv_path)
 
+# Display the last updated timestamp
+file_timestamp = get_file_timestamp(csv_path)
+
+if file_timestamp:
+    st.sidebar.markdown(f"📅 **Data last updated:** {file_timestamp}")
+else:
+    st.sidebar.markdown("⚠️ **Data file not found!**")
+
 # Check if file exists before loading
 if os.path.exists(csv_path):
-    df = load_data()
+    df = load_data()  # Always loads the latest CSV
 
     # Ensure necessary columns exist
     required_columns = {
